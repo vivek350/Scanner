@@ -8,13 +8,13 @@ public enum CameraPosition {
     case back
 }
 
-public protocol ScannerDelegate {
-    func cancelButtonTapped(controller: Scanner)
-    func barcodeReadValue(controller: Scanner, resultValue: String)
+public protocol ScannerViewDelegate {
+    func cancelButtonTapped(controller: ScannerView)
+    func barcodeReadValue(controller: ScannerView, resultValue: String)
 }
 
 
-public final class Scanner: UIViewController {
+public final class ScannerView: UIViewController {
     
     private let scannerQueue = DispatchQueue(label: "Scanner Queue")
     private let metadataScannerQueue = DispatchQueue(label: "Metadata Scanner Queue")
@@ -24,7 +24,7 @@ public final class Scanner: UIViewController {
     public var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     private var output: AVCaptureMetadataOutput?
     
-    public var delegate: ScannerDelegate?
+    public var delegate: ScannerViewDelegate?
     //comment
     
     private var _cancelButton: UIButton?
@@ -224,7 +224,7 @@ public final class Scanner: UIViewController {
     }
 }
 
-extension Scanner: AVCaptureMetadataOutputObjectsDelegate {
+extension ScannerView: AVCaptureMetadataOutputObjectsDelegate {
     
     public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         
@@ -253,7 +253,7 @@ extension Scanner: AVCaptureMetadataOutputObjectsDelegate {
 
 // MARK: UIButton functions
 
-fileprivate extension Scanner {
+fileprivate extension ScannerView {
     @objc func cancelButtonTapped() {
         if let delegate = self.delegate {
             delegate.cancelButtonTapped(controller: self)
