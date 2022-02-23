@@ -235,9 +235,11 @@ extension ScannerView: AVCaptureMetadataOutputObjectsDelegate {
         
         for obj in metadataObjects {
             let metadataObj = videoPreviewLayer?.transformedMetadataObject(for: obj)
-            scannerBox.frame = metadataObj!.bounds
-            scannerBox.layer.borderColor = UIColor.red.cgColor
-            scannerBox.layer.borderWidth = 2
+            DispatchQueue.main.async {
+                self.scannerBox.frame = metadataObj!.bounds
+                self.scannerBox.layer.borderColor = UIColor.red.cgColor
+                self.scannerBox.layer.borderWidth = 2
+            }
             guard let text = (obj as? AVMetadataMachineReadableCodeObject)?.stringValue else { return }
             
             stopCapturing()
